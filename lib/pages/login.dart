@@ -60,11 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: "Password"),
             ),
             ElevatedButton(
-                onPressed: () {
-                  // check login success w/ server
-                  // if success move to main page
-                  Navigator.pushNamed(context, "/main");
-                },
+                onPressed: handleLogin,
                 style: ElevatedButton.styleFrom(
                   textStyle: const TextStyle(fontSize: 20),
                   padding: const EdgeInsets.all(16.0)
