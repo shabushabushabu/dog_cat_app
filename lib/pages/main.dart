@@ -3,7 +3,7 @@ import 'animal_view.dart';
 import 'animal_submit.dart';
 // import 'package:flutter/cupertino.dart'; // for ios
 
-class MainPage extends StatefulWidget { 
+class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
   @override
@@ -11,11 +11,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  
   List<Animal> animals = [];
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     // async
 
@@ -28,17 +27,14 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            "Dog Cat Matcher", 
-            style: TextStyle(fontSize: 20))
-      ),
+          title: const Text("Dog Cat Matcher", style: TextStyle(fontSize: 20))),
       body: AnimalGrid(animals: animals),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const AnimalSubmit()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AnimalSubmit()));
         },
         child: const Icon(Icons.add),
       ),
@@ -47,20 +43,17 @@ class _MainPageState extends State<MainPage> {
 }
 
 class AnimalGrid extends StatelessWidget {
-  const AnimalGrid(
-      {Key? key,
-        required this.animals}) : super(key: key);
+  const AnimalGrid({Key? key, required this.animals}) : super(key: key);
 
   final List<Animal> animals;
 
   @override
   Widget build(BuildContext context) {
-
-    List<AnimalCard> animalCards = animals.map((animal) =>
-        AnimalCard(
-          animal: animal,
-        )
-    ).toList();
+    List<AnimalCard> animalCards = animals
+        .map((animal) => AnimalCard(
+              animal: animal,
+            ))
+        .toList();
 
     return GridView.count(
       crossAxisCount: 2,
@@ -73,21 +66,19 @@ class AnimalGrid extends StatelessWidget {
 }
 
 class AnimalCard extends StatelessWidget {
-  const AnimalCard({
-    Key? key,
-    required this.animal}) : super(key: key);
+  const AnimalCard({Key? key, required this.animal}) : super(key: key);
 
   final Animal animal;
 
-  void handlerTap(BuildContext context){
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context)=> AnimalViewPage(animal: animal))
-    );
+  void handlerTap(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AnimalViewPage(animal: animal)));
   }
 
   @override
   Widget build(BuildContext context) {
-
     Widget photo = (animal.photoUrl != "")
         ? Image(
             image: AssetImage(animal.photoUrl),
@@ -97,17 +88,14 @@ class AnimalCard extends StatelessWidget {
         color: Colors.amber[100],
         child: InkWell(
           splashColor: Colors.orangeAccent,
-          onTap: (){
+          onTap: () {
             handlerTap(context);
           },
           child: Column(
             children: <Widget>[
               photo,
-              Text(
-                  animal.name,
-                  style: const TextStyle(fontSize: 20)),
-              Text(
-                  animal.description),
+              Text(animal.name, style: const TextStyle(fontSize: 20)),
+              Text(animal.description),
             ],
           ),
         ));
@@ -126,6 +114,14 @@ class Animal {
 
 class DummyData {
   List<Animal> animals = [
+    Animal("Shabu", "Lovely corgi", ["corgi", "male"], "assets/IMG_9102.jpeg"),
+    Animal("Bubu", "Fat corgi", ["corgi", "fat"], "assets/IMG_9134.jpeg"),
+    Animal(
+        "Fatbu", "Lovely chubby", ["corgi", "chubby"], "assets/IMG_9135.jpeg"),
+    Animal("Shabu", "Lovely corgi", ["corgi", "male"], "assets/IMG_9102.jpeg"),
+    Animal("Bubu", "Fat corgi", ["corgi", "fat"], "assets/IMG_9134.jpeg"),
+    Animal(
+        "Fatbu", "Lovely chubby", ["corgi", "chubby"], "assets/IMG_9135.jpeg"),
     Animal("Shabu", "Lovely corgi", ["corgi", "male"], "assets/IMG_9102.jpeg"),
     Animal("Bubu", "Fat corgi", ["corgi", "fat"], "assets/IMG_9134.jpeg"),
     Animal(
