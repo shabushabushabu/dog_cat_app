@@ -20,6 +20,10 @@ class _RegisterPageState extends State<RegisterPage> {
   String _formOccupation = "";
   String _formPassword = "";
 
+  void navigateOnSuccess(){
+    Navigator.pushNamed(context, "/");
+  }
+
   void handleSubmit() async {
     final response =
         await http.post(Uri.parse("http://127.0.0.1:4000/api/user"),
@@ -34,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
             }));
 
     if (response.statusCode == 200) {
-      Navigator.pushNamed(context, "/");
+      navigateOnSuccess();
     } else {
       throw Exception("Server error: ${response.statusCode}");
     }

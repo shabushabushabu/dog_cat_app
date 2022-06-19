@@ -13,6 +13,11 @@ class _LoginPageState extends State<LoginPage> {
   String _formEmail = "";
   String _formPassword = "";
 
+  void navigateOnSuccess() {
+    Navigator.pushNamedAndRemoveUntil(
+        context, "/main", (Route<dynamic> route) => false);
+  }
+
   void handleLogin() async {
     final response = await http.post(
         Uri.parse("http://127.0.0.1:4000/api/login"),
@@ -20,8 +25,7 @@ class _LoginPageState extends State<LoginPage> {
         body: json.encode({"email": _formEmail, "password": _formPassword}));
 
     if (response.statusCode == 200) {
-      Navigator.pushNamedAndRemoveUntil(
-          context, "/main", (Route<dynamic> route) => false);
+      navigateOnSuccess();
     } else {
       throw Exception("Server error: ${response.statusCode}");
     }
