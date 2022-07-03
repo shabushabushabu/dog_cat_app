@@ -30,34 +30,33 @@ class _AnimalSubmitState extends State<AnimalSubmit> {
   void handleSubmit() async {
     logger.d("Sending request to POST /api/animal");
 
-    final response =
-    await http.post(Uri.parse("http://127.0.0.1:4000/api/animal"),
+    final response = await http.post(
+        Uri.parse("http://127.0.0.1:4000/api/animal"),
         headers: {"Content-type": "application/json"},
         body: json.encode({
           "name": _formName,
           "description": _formDescription,
           "tags": _formTags
         }));
-    if (response.statusCode==200) {
+    if (response.statusCode == 200) {
       logger.d("Received request from POST /api/animal");
 
       final res = json.decode(response.body);
       final animalId = res["id"];
 
-      if (_formImage!=null) {
+      if (_formImage != null) {
         var photoBytes = await _formImage?.readAsBytes();
 
-        var uploadRequest = http.MultipartRequest( "POST",
-            Uri.parse("http://127.0.0.1:4000/api/uploadPhoto")
-        );
+        var uploadRequest = http.MultipartRequest(
+            "POST", Uri.parse("http://127.0.0.1:4000/api/uploadPhoto"));
         uploadRequest.fields["id"] = animalId;
-        uploadRequest.files.add(
-            http.MultipartFile.fromBytes("photo", photoBytes!));
+        uploadRequest.files
+            .add(http.MultipartFile.fromBytes("photo", photoBytes!));
 
         logger.d("Sending upload photo request to POST /api/uploadPhoto");
         var uploadResponse = await uploadRequest.send();
 
-        if (uploadResponse.statusCode==201){
+        if (uploadResponse.statusCode == 201) {
           logger.d("Received success response from POST /api/uploadPhoto");
           navigateBack();
         } else {
