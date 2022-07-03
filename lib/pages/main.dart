@@ -87,7 +87,13 @@ class _MainPageState extends State<MainPage> {
           )
         ],
       ),
-      body: AnimalGrid(animals: animals),
+      body: RefreshIndicator(
+        onRefresh: () async{
+          fetchData();
+        },
+        child: AnimalGrid(animals: animals),
+      ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
