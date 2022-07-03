@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   String _formPassword = "";
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     checkAutoLogin();
   }
@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString("token");
     logger.d("Check for existing token: $token");
-    if (token!=null) {
+    if (token != null) {
       navigateOnSuccess();
     }
   }
@@ -63,28 +63,21 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Dog Cat Matcher Mobile")
-        ),
+        appBar: AppBar(title: const Text("Dog Cat Matcher Mobile")),
         body: Center(
           child: Column(
             children: <Widget>[
               const Image(
                 image: AssetImage("assets/IMG_9185.jpeg"),
               ),
-
               Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(10),
                 child: const Text(
                   "For all animal lovers",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 15),
+                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 15),
                 ),
               ),
-
-
               Padding(
                 padding: const EdgeInsets.only(
                     left: 30, right: 30, top: 10, bottom: 10),
@@ -98,7 +91,6 @@ class _LoginPageState extends State<LoginPage> {
                       border: OutlineInputBorder(), labelText: "Email Address"),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.only(
                     left: 30, right: 30, top: 10, bottom: 10),
@@ -108,25 +100,22 @@ class _LoginPageState extends State<LoginPage> {
                       _formPassword = value;
                     });
                   },
+                  obscureText: true,
                   decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Password"),
+                      border: OutlineInputBorder(), labelText: "Password"),
                 ),
               ),
-
               SizedBox(
-                height:  50,
+                height: 50,
                 // padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: ElevatedButton(
                   onPressed: handleLogin,
                   style: ElevatedButton.styleFrom(
                       textStyle: const TextStyle(fontSize: 16),
-                      padding: const EdgeInsets.all(16.0)
-                  ),
-                  child: const Text ("Login"),
+                      padding: const EdgeInsets.all(16.0)),
+                  child: const Text("Login"),
                 ),
               ),
-
               TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, "/register");
@@ -134,7 +123,6 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Text("Create New Account"))
             ],
           ),
-        )
-        );
+        ));
   }
 }
