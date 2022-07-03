@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'animal_view.dart';
 import 'animal_submit.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:logger/logger.dart';
 // import 'package:flutter/cupertino.dart'; // for ios
+
+final logger = Logger();
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -17,13 +22,42 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    // async
 
-    DummyData dummy = DummyData();
+    fetchData();
 
-    setState(() {
-      animals = dummy.animals;
-    });
+    // // Stub loads data from dummy
+    // DummyData dummy = DummyData();
+    // setState(() {
+    //   animals = dummy.animals;
+    // });
+  }
+
+  void fetchData() async {
+    logger.d("Fetching data from /api/animals");
+
+    var response = await http.get(
+        Uri.parse("http://127.0.0.1:4000/api/animals"),
+        headers: {"Content-type": "application/json"});
+
+    if (response.statusCode == 200) {
+      logger.d("Received response from GET /api/animals");
+      List<dynamic> animalJsonList = json.decode(response.body);
+      List<Animal> animalList = [];
+      for (var i = 0; i < animalJsonList.length; i++) {
+        var json = animalJsonList[i];
+        List<dynamic> tagList = json['tags'];
+        var tags = tagList.map((t) => t.toString()).toList();
+        var newAnimal = Animal(
+            json["name"], json["description"], tags, json["photoUrls"][0]);
+        animalList.add(newAnimal);
+      }
+
+      setState(() {
+        animals = animalList;
+      });
+    } else {
+      logger.d("Error response: ${response.statusCode}");
+    }
   }
 
   void navigateOnSuccess() {
@@ -102,11 +136,16 @@ class AnimalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget photo = (animal.photoUrl != "")
-        ? Image(
-            image: AssetImage(animal.photoUrl),
-          )
-        : const Text("No photo");
+    // Widget photo = (animal.photoUrl != "")
+    //     ? Image(
+    //         image: AssetImage(animal.photoUrl),
+    //       )
+    //     : const Text("No photo");
+
+    Widget photo = (animal.photoUrl != '')
+        ? Image.network("http://127.0.0.1:4000${animal.photoUrl}")
+        : const Text("No Photo");
+
     return Card(
         color: Colors.amber[100],
         child: InkWell(
