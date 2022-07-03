@@ -117,8 +117,8 @@ class AnimalCard extends StatelessWidget {
           child: Column(
             children: <Widget>[
               photo,
-              Text(animal.name, style: const TextStyle(fontSize: 20)),
-              Text(animal.description),
+              Text(animal.name, style: const TextStyle(fontSize: 18)),
+              Text(animal.description, style: const TextStyle(fontSize: 10)),
             ],
           ),
         ));
@@ -138,16 +138,16 @@ class Animal {
 class DummyData {
   List<Animal> animals = [
     Animal("Shabu", "Lovely corgi", ["corgi", "male"], "assets/IMG_9102.jpeg"),
-    Animal("Bubu", "Fat corgi", ["corgi", "fat"], "assets/IMG_9134.jpeg"),
+    Animal("Bubu", "Fat corgi", ["corgi", "fat"], "assets/IMG_9131.jpeg"),
     Animal(
-        "Fatbu", "Lovely chubby", ["corgi", "chubby"], "assets/IMG_9135.jpeg"),
+        "Fatbu", "Lovely chubby", ["corgi", "chubby"], "assets/IMG_9134.jpeg"),
     Animal("Shabu", "Lovely corgi", ["corgi", "male"], "assets/IMG_9102.jpeg"),
-    Animal("Bubu", "Fat corgi", ["corgi", "fat"], "assets/IMG_9134.jpeg"),
+    Animal("Bubu", "Fat corgi", ["corgi", "fat"], "assets/IMG_9131.jpeg"),
     Animal(
-        "Fatbu", "Lovely chubby", ["corgi", "chubby"], "assets/IMG_9135.jpeg"),
+        "Fatbu", "Lovely chubby", ["corgi", "chubby"], "assets/IMG_9134.jpeg"),
     Animal("Shabu", "Lovely corgi", ["corgi", "male"], "assets/IMG_9102.jpeg"),
-    Animal("Bubu", "Fat corgi", ["corgi", "fat"], "assets/IMG_9134.jpeg"),
+    Animal("Bubu", "Fat corgi", ["corgi", "fat"], "assets/IMG_9131.jpeg"),
     Animal(
-        "Fatbu", "Lovely chubby", ["corgi", "chubby"], "assets/IMG_9135.jpeg"),
+        "Fatbu", "Lovely chubby", ["corgi", "chubby"], "assets/IMG_9134.jpeg"),
   ];
 }
