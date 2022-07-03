@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
+final logger = Logger();
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -13,18 +17,43 @@ class _LoginPageState extends State<LoginPage> {
   String _formEmail = "";
   String _formPassword = "";
 
+  @override
+  void initState(){
+    super.initState();
+    checkAutoLogin();
+  }
+
   void navigateOnSuccess() {
     Navigator.pushNamedAndRemoveUntil(
         context, "/main", (Route<dynamic> route) => false);
   }
 
+  void checkAutoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString("token");
+    logger.d("Check for existing token: $token");
+    if (token!=null) {
+      navigateOnSuccess();
+    }
+  }
+
   void handleLogin() async {
+    logger.d("Sending request to POST /api/login");
+
     final response = await http.post(
         Uri.parse("http://127.0.0.1:4000/api/login"),
         headers: {"Content-type": "application/json"},
         body: json.encode({"email": _formEmail, "password": _formPassword}));
 
     if (response.statusCode == 200) {
+      logger.d("Received response from POST /api/login");
+
+      var res = json.decode(response.body);
+      logger.d("Token: ${res["token"]}");
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString("token", res["token"]);
+
       navigateOnSuccess();
     } else {
       throw Exception("Server error: ${response.statusCode}");
