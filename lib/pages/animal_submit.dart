@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 
@@ -17,8 +19,75 @@ class _AnimalSubmitState extends State<AnimalSubmit> {
   String _formDescription = "";
   String _formNewTag = "";
   List<String> _formTags = [];
+  XFile? _formImage;
 
   final newTagField = TextEditingController();
+
+  void navigateBack() {
+    Navigator.pop(context);
+  }
+
+  void handleSubmit() async {
+    logger.d("Sending request to POST /api/animal");
+
+    final response =
+    await http.post(Uri.parse("http://127.0.0.1:4000/api/animal"),
+        headers: {"Content-type": "application/json"},
+        body: json.encode({
+          "name": _formName,
+          "description": _formDescription,
+          "tags": _formTags
+        }));
+    if (response.statusCode==200) {
+      logger.d("Received request from POST /api/animal");
+
+      final res = json.decode(response.body);
+      final animalId = res["id"];
+
+      if (_formImage!=null) {
+        var photoBytes = await _formImage?.readAsBytes();
+
+        var uploadRequest = http.MultipartRequest( "POST",
+            Uri.parse("http://127.0.0.1:4000/api/uploadPhoto")
+        );
+        uploadRequest.fields["id"] = animalId;
+        uploadRequest.files.add(
+            http.MultipartFile.fromBytes("photo", photoBytes!));
+
+        logger.d("Sending upload photo request to POST /api/uploadPhoto");
+        var uploadResponse = await uploadRequest.send();
+
+        if (uploadResponse.statusCode==201){
+          logger.d("Received success response from POST /api/uploadPhoto");
+          navigateBack();
+        } else {
+          logger.d("Error response: ${uploadResponse.statusCode}");
+          navigateBack();
+        }
+      } else {
+        logger.d("No image sent");
+        navigateBack();
+      }
+    } else {
+      logger.d("Error response: ${response.statusCode}");
+    }
+  }
+
+  void handleSelectPhoto() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _formImage = image;
+    });
+    logger.d("Upload an image");
+  }
+
+  void handleTakePhoto() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    setState(() {
+      _formImage = image;
+    });
+    logger.d("Take an image");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,19 +205,19 @@ class _AnimalSubmitState extends State<AnimalSubmit> {
                       icon: const Icon(Icons.add_photo_alternate_rounded,
                           size: 40.0),
                       color: Colors.amber.shade600,
-                      onPressed: () {},
+                      onPressed: handleSelectPhoto,
                     ),
                     IconButton(
                       icon: const Icon(Icons.add_a_photo_rounded, size: 40.0),
                       color: Colors.amber.shade600,
-                      onPressed: () {},
+                      onPressed: handleTakePhoto,
                     ),
                     SizedBox(
                       height: 40,
                       // padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: ElevatedButton(
                         // style: style,
-                        onPressed: () {},
+                        onPressed: handleSubmit,
                         // style: style,
                         child: const Text("Submit Animal"),
                       ),
