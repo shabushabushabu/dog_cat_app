@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 import 'main.dart';
+
+final logger = Logger();
 
 class AnimalViewPage extends StatelessWidget {
   const AnimalViewPage({Key? key, required this.animal}) : super(key: key);
@@ -40,6 +43,32 @@ class AnimalViewPage extends StatelessWidget {
               spacing: 15,
               children: tags,
             ),
+            Padding(
+                padding: const EdgeInsets.only(
+                    left: 30, right: 30, top: 50, bottom: 10),
+                child: Wrap(
+                    alignment: WrapAlignment.spaceEvenly,
+                    spacing: 3,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 25.0),
+                        child: Text(
+                          "Adopt me!",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                              color: Colors.orange),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.pets_rounded, size: 50.0),
+                        color: Colors.amber.shade400,
+                        onPressed: () {
+                          logger.d("Adopt pet: ${animal.name}");
+                          Navigator.pushNamed(context, "/main");
+                        },
+                      ),
+                    ])),
           ],
         ));
   }
