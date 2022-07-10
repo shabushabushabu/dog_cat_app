@@ -91,15 +91,22 @@ class _AnimalSubmitState extends State<AnimalSubmit> {
   @override
   Widget build(BuildContext context) {
     List<Widget> tags = _formTags
-        .map((tag) => TextButton(
-            onPressed: () {
-              var oldTags = _formTags;
-              oldTags.remove(tag);
-              setState(() {
-                _formTags = oldTags;
-              });
-            },
-            child: Text("#$tag")))
+        .map((tag) => Chip(
+              labelPadding: const EdgeInsets.only(left: 8.0),
+              label: Text("#$tag"),
+              deleteIcon: const Icon(
+                Icons.close,
+                size: 18,
+              ),
+              onDeleted: () {
+                var oldTags = _formTags;
+                oldTags.remove(tag);
+                setState(() {
+                  _formTags = oldTags;
+                });
+              },
+              backgroundColor: Colors.amber[100],
+            ))
         .toList();
 
     return Scaffold(
@@ -190,6 +197,7 @@ class _AnimalSubmitState extends State<AnimalSubmit> {
                 padding: const EdgeInsets.only(
                     left: 30, right: 30, top: 10, bottom: 10),
                 child: Wrap(
+                  spacing: 15,
                   children: tags,
                 ),
               ),
