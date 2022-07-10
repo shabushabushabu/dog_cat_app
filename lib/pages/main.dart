@@ -88,12 +88,11 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () async{
+        onRefresh: () async {
           fetchData();
         },
         child: AnimalGrid(animals: animals),
       ),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
@@ -163,7 +162,8 @@ class AnimalCard extends StatelessWidget {
             children: <Widget>[
               photo,
               Text(animal.name, style: const TextStyle(fontSize: 18)),
-              Text(animal.description, style: const TextStyle(fontSize: 10)),
+              Text(animal.description.split(".")[0],
+                  style: const TextStyle(fontSize: 10)),
             ],
           ),
         ));
